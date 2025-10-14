@@ -36,37 +36,40 @@ class ManajemenTiketView extends GetView<ManajemenTiketController> {
         Get.offAllNamed(Routes.HOME);
         return false; // Mencegah navigasi default
       },
-      child: Scaffold(
-        backgroundColor: primaryBlue, // Status bar akan mengikuti warna ini
-        appBar: _buildModernAppBar(res),
-        body: Container(
-          color: backgroundColor,
-          child: Column(
-            children: [
-              // Gradasi shadow di antara header dan content
-              Container(
-                height: res.hp(2.5),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      darkBlue.withOpacity(0.15),
-                      darkBlue.withOpacity(0.10),
-                      darkBlue.withOpacity(0.05),
-                      Colors.black.withOpacity(0.03),
-                      Colors.black.withOpacity(0.01),
-                      Colors.transparent,
-                    ],
-                    stops: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          backgroundColor: primaryBlue, // Status bar akan mengikuti warna ini
+          appBar: _buildModernAppBar(res),
+          body: Container(
+            color: backgroundColor,
+            child: Column(
+              children: [
+                // Gradasi shadow di antara header dan content
+                Container(
+                  height: res.hp(2.5),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        darkBlue.withOpacity(0.15),
+                        darkBlue.withOpacity(0.10),
+                        darkBlue.withOpacity(0.05),
+                        Colors.black.withOpacity(0.03),
+                        Colors.black.withOpacity(0.01),
+                        Colors.transparent,
+                      ],
+                      stops: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+                    ),
                   ),
                 ),
-              ),
-              Expanded(child: _buildBody(res)),
-            ],
+                Expanded(child: _buildBody(res)),
+              ],
+            ),
           ),
+          floatingActionButton: _buildModernFloatingActionButton(context, res),
         ),
-        floatingActionButton: _buildModernFloatingActionButton(context, res),
       ),
     );
   }
@@ -112,7 +115,7 @@ class ManajemenTiketView extends GetView<ManajemenTiketController> {
                             'Data Tiket',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: res.sp(22),
+                              fontSize: res.sp(20),
                               fontWeight: FontWeight.w700,
                               letterSpacing: -0.5,
                             ),
@@ -122,7 +125,7 @@ class ManajemenTiketView extends GetView<ManajemenTiketController> {
                             'Kelola tiket acara Anda',
                             style: TextStyle(
                               color: Colors.white70,
-                              fontSize: res.sp(14),
+                              fontSize: res.sp(12),
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -274,7 +277,7 @@ class ManajemenTiketView extends GetView<ManajemenTiketController> {
                     'Belum ada tiket',
                     style: TextStyle(
                       color: textPrimary,
-                      fontSize: res.sp(20),
+                      fontSize: res.sp(18),
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -283,7 +286,7 @@ class ManajemenTiketView extends GetView<ManajemenTiketController> {
                     'Mulai dengan menambahkan tiket pertama Anda',
                     style: TextStyle(
                       color: textSecondary,
-                      fontSize: res.sp(14),
+                      fontSize: res.sp(13),
                       fontWeight: FontWeight.w400,
                     ),
                     textAlign: TextAlign.center,

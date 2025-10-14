@@ -224,7 +224,7 @@ class _DaftarKasirViewState extends State<DaftarKasirView> {
             'Tidak ada daftar $type yang dapat ditampilkan.',
             style: TextStyle(
               color: textSecondary,
-              fontSize: res.sp(15),
+              fontSize: res.sp(14),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -233,7 +233,7 @@ class _DaftarKasirViewState extends State<DaftarKasirView> {
             'Tambahkan $type baru melalui menu manajemen.',
             style: TextStyle(
               color: textSecondary.withOpacity(0.7),
-              fontSize: res.sp(13),
+              fontSize: res.sp(12),
             ),
           ),
         ],

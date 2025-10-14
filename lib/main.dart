@@ -31,8 +31,11 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Application",
+      theme: ThemeData(
+        fontFamily: 'Poppins',
+      ),
       initialRoute:
-          '/login', // Ganti ke route yang kamu inginkan, misalnya '/login' atau '/dashboard'
+          '/home', // Ganti ke route yang kamu inginkan, misalnya '/login' atau '/dashboard'
       getPages: AppPages.routes,
     );
 

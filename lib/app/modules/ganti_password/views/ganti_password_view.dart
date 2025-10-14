@@ -29,7 +29,13 @@ class GantiPasswordView extends StatelessWidget {
             color: Colors.white,
             size: res.sp(20),
           ),
-          onPressed: () => Get.back(),
+          onPressed: () {
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+            } else {
+              Get.offAllNamed('/profileuser2');
+            }
+          },
         ),
       ),
       body: SingleChildScrollView(
@@ -78,7 +84,7 @@ class GantiPasswordView extends StatelessWidget {
                       obscureText: !controller.isPasswordLamaVisible.value,                      decoration: InputDecoration(
                         hintText: 'Password Saat Ini',
                         hintStyle: TextStyle(
-                          fontSize: res.sp(15),
+                          fontSize: res.sp(12),
                           color: Colors.grey.shade500,
                         ),
                         prefixIcon: Icon(
@@ -137,7 +143,7 @@ class GantiPasswordView extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: 'Password Baru',
                         hintStyle: TextStyle(
-                          fontSize: res.sp(15),
+                          fontSize: res.sp(12),
                           color: Colors.grey.shade500,
                         ),
                         prefixIcon: Icon(
@@ -196,7 +202,7 @@ class GantiPasswordView extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: 'Konfirmasi Password Baru',
                         hintStyle: TextStyle(
-                          fontSize: res.sp(15),
+                          fontSize: res.sp(12),
                           color: Colors.grey.shade500,
                         ),
                         prefixIcon: Icon(

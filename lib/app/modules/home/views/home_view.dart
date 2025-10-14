@@ -18,6 +18,15 @@ class _HomeViewState extends State<HomeView> {
   int _pageIndex = 0;
   final HomeController homeController = Get.put(HomeController());
 
+  // Refresh function
+  Future<void> refreshPage() async {
+    await homeController.fetchCompanyDetails();
+    await homeController
+        .fetchLineChartData(homeController.selectedLineChartFilter.value);
+    await homeController.fetchRecentTransactions();
+    setState(() {}); // Optional: force rebuild if needed
+  }
+
   // Modern color palette
   static const Color primaryBlue = Color(0xff181681);
   static const Color lightBlue = Color(0xFFE8E9FF);
@@ -36,6 +45,7 @@ class _HomeViewState extends State<HomeView> {
         .fetchLineChartData(homeController.selectedLineChartFilter.value);
     homeController.fetchRecentTransactions();
   }
+
   @override
   Widget build(BuildContext context) {
     final res = AutoResponsive(context);
@@ -49,8 +59,11 @@ class _HomeViewState extends State<HomeView> {
         appBar: _buildModernAppBar(res),
         body: Container(
           color: backgroundColor,
-          child: SingleChildScrollView(
-            child: _buildContent(res),
+          child: RefreshIndicator(
+            onRefresh: refreshPage,
+            child: SingleChildScrollView(
+              child: _buildContent(res),
+            ),
           ),
         ),
         bottomNavigationBar: CustomNavigationBar(
@@ -207,6 +220,7 @@ class _HomeViewState extends State<HomeView> {
       ),
     );
   }
+
   String _getCurrentDate() {
     final now = DateTime.now();
     final months = [
@@ -235,142 +249,148 @@ class _HomeViewState extends State<HomeView> {
 
     return '${days[now.weekday % 7]}, ${now.day} ${months[now.month - 1]} ${now.year}';
   }
-  
-  Future<bool> _showExitConfirmationDialog(BuildContext context, AutoResponsive res) async {
+
+  Future<bool> _showExitConfirmationDialog(
+      BuildContext context, AutoResponsive res) async {
     return await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(res.wp(5)),
-          ),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          child: Container(
-            padding: EdgeInsets.all(res.wp(5)),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(res.wp(4)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: res.wp(5),
-                  offset: Offset(0, res.hp(1)),
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Icon in gradient circle
-                Container(
-                  width: res.wp(20),
-                  height: res.wp(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        primaryBlue.withOpacity(0.8),
-                        darkBlue,
-                      ],
-                    ),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.exit_to_app_rounded,
-                    color: Colors.white,
-                    size: res.wp(10),
-                  ),
-                ),
-                
-                SizedBox(height: res.hp(2.5)),
-                
-                // Title
-                Text(
-                  "Keluar Aplikasi",
-                  style: TextStyle(
-                    fontSize: res.sp(18),
-                    fontWeight: FontWeight.w700,
-                    color: textPrimary,
-                    letterSpacing: -0.3,
-                  ),
-                ),
-                
-                SizedBox(height: res.hp(1)),
-                
-                // Message
-                Text(
-                  "Apakah Anda yakin ingin keluar dari aplikasi?",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: res.sp(14),
-                    color: textSecondary,
-                  ),
-                ),
-                
-                SizedBox(height: res.hp(3)),
-                
-                // Button row
-                Row(
-                  children: [
-                    // Cancel button
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey.shade100,
-                          foregroundColor: textPrimary,
-                          elevation: 0,
-                          padding: EdgeInsets.symmetric(vertical: res.hp(1.5)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(res.wp(2.5)),
-                            side: BorderSide(color: borderColor),
-                          ),
-                        ),
-                        child: Text(
-                          "Batal",
-                          style: TextStyle(
-                            fontSize: res.sp(14),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ),
-                    
-                    SizedBox(width: res.wp(3)),
-                    
-                    // Exit button
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryBlue,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          padding: EdgeInsets.symmetric(vertical: res.hp(1.5)),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(res.wp(2.5)),
-                          ),
-                        ),
-                        child: Text(
-                          "Keluar",
-                          style: TextStyle(
-                            fontSize: res.sp(14),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+          context: context,
+          builder: (context) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(res.wp(5)),
+              ),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              child: Container(
+                padding: EdgeInsets.all(res.wp(5)),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(res.wp(4)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: res.wp(5),
+                      offset: Offset(0, res.hp(1)),
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-        );
-      },
-    ) ?? false; // Default to false if dialog is dismissed
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Icon in gradient circle
+                    Container(
+                      width: res.wp(20),
+                      height: res.wp(20),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            primaryBlue.withOpacity(0.8),
+                            darkBlue,
+                          ],
+                        ),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.exit_to_app_rounded,
+                        color: Colors.white,
+                        size: res.wp(10),
+                      ),
+                    ),
+
+                    SizedBox(height: res.hp(2.5)),
+
+                    // Title
+                    Text(
+                      "Keluar Aplikasi",
+                      style: TextStyle(
+                        fontSize: res.sp(18),
+                        fontWeight: FontWeight.w700,
+                        color: textPrimary,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+
+                    SizedBox(height: res.hp(1)),
+
+                    // Message
+                    Text(
+                      "Apakah Anda yakin ingin keluar dari aplikasi?",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: res.sp(14),
+                        color: textSecondary,
+                      ),
+                    ),
+
+                    SizedBox(height: res.hp(3)),
+
+                    // Button row
+                    Row(
+                      children: [
+                        // Cancel button
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey.shade100,
+                              foregroundColor: textPrimary,
+                              elevation: 0,
+                              padding:
+                                  EdgeInsets.symmetric(vertical: res.hp(1.5)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(res.wp(2.5)),
+                                side: BorderSide(color: borderColor),
+                              ),
+                            ),
+                            child: Text(
+                              "Batal",
+                              style: TextStyle(
+                                fontSize: res.sp(14),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(width: res.wp(3)),
+
+                        // Exit button
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryBlue,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              padding:
+                                  EdgeInsets.symmetric(vertical: res.hp(1.5)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(res.wp(2.5)),
+                              ),
+                            ),
+                            child: Text(
+                              "Keluar",
+                              style: TextStyle(
+                                fontSize: res.sp(14),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ) ??
+        false; // Default to false if dialog is dismissed
   }
 
   Widget _buildUserInfoSection(AutoResponsive res) {
@@ -521,7 +541,7 @@ class _HomeViewState extends State<HomeView> {
                         subtitle,
                         style: TextStyle(
                           color: textSecondary,
-                          fontSize: res.sp(13),
+                          fontSize: res.sp(11),
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -586,7 +606,7 @@ class _HomeViewState extends State<HomeView> {
                       'Grafik penjualan terkini',
                       style: TextStyle(
                         color: textSecondary,
-                        fontSize: res.sp(13),
+                        fontSize: res.sp(11),
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -606,12 +626,9 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 child: PopupMenuButton<String>(
                   icon: Icon(
-                    Icons.tune_rounded,
+                    Icons.filter_list,
                     color: primaryBlue,
-                    size: res.sp(20),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    size: res.sp(18),
                   ),
                   elevation: 8,
                   onSelected: (value) {
@@ -620,7 +637,7 @@ class _HomeViewState extends State<HomeView> {
                   },
                   itemBuilder: (context) => [
                     PopupMenuItem(
-                      value: 'two_months',
+                      value: 'Dua bulan',
                       child: Row(
                         children: [
                           Icon(Icons.calendar_view_month,
@@ -631,7 +648,7 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     PopupMenuItem(
-                      value: 'day',
+                      value: 'Hari',
                       child: Row(
                         children: [
                           Icon(Icons.calendar_today,
@@ -916,7 +933,7 @@ class _HomeViewState extends State<HomeView> {
                     '5 transaksi terakhir',
                     style: TextStyle(
                       color: textSecondary,
-                      fontSize: res.sp(13),
+                      fontSize: res.sp(11),
                       fontWeight: FontWeight.w400,
                     ),
                   ),
@@ -940,7 +957,7 @@ class _HomeViewState extends State<HomeView> {
                     Text(
                       'Lihat Semua',
                       style: TextStyle(
-                        fontSize: res.sp(13),
+                        fontSize: res.sp(11),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -1012,7 +1029,7 @@ class _HomeViewState extends State<HomeView> {
                       'Belum ada transaksi',
                       style: TextStyle(
                         color: textSecondary,
-                        fontSize: res.sp(16),
+                        fontSize: res.sp(13),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -1021,7 +1038,7 @@ class _HomeViewState extends State<HomeView> {
                       'Transaksi akan muncul di sini',
                       style: TextStyle(
                         color: textSecondary.withOpacity(0.7),
-                        fontSize: res.sp(12),
+                        fontSize: res.sp(10),
                       ),
                     ),
                   ],

@@ -53,37 +53,40 @@ class DaftarProdukView extends StatelessWidget {
         Get.offAllNamed(Routes.HOME);
         return false; // Prevent default back navigation
       },
-      child: Scaffold(
-        backgroundColor: primaryBlue,
-        appBar: _buildModernAppBar(res),
-        body: Container(
-          color: backgroundColor,
-          child: Column(
-            children: [
-              // Gradasi shadow di antara header dan content
-              Container(
-                height: res.hp(2.5),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      darkBlue.withOpacity(0.15),
-                      darkBlue.withOpacity(0.10),
-                      darkBlue.withOpacity(0.05),
-                      Colors.black.withOpacity(0.03),
-                      Colors.black.withOpacity(0.01),
-                      Colors.transparent,
-                    ],
-                    stops: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          backgroundColor: primaryBlue,
+          appBar: _buildModernAppBar(res),
+          body: Container(
+            color: backgroundColor,
+            child: Column(
+              children: [
+                // Gradasi shadow di antara header dan content
+                Container(
+                  height: res.hp(2.5),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        darkBlue.withOpacity(0.15),
+                        darkBlue.withOpacity(0.10),
+                        darkBlue.withOpacity(0.05),
+                        Colors.black.withOpacity(0.03),
+                        Colors.black.withOpacity(0.01),
+                        Colors.transparent,
+                      ],
+                      stops: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0],
+                    ),
                   ),
                 ),
-              ),
-              Expanded(child: _buildBody(res)),
-            ],
+                Expanded(child: _buildBody(res)),
+              ],
+            ),
           ),
+          floatingActionButton: _buildModernFAB(res),
         ),
-        floatingActionButton: _buildModernFAB(res),
       ),
     );
   }
@@ -127,7 +130,7 @@ class DaftarProdukView extends StatelessWidget {
                             'Daftar Produk',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: res.sp(20),
+                              fontSize: res.sp(18),
                               fontWeight: FontWeight.w700,
                               letterSpacing: -0.5,
                             ),
@@ -137,7 +140,7 @@ class DaftarProdukView extends StatelessWidget {
                             'Kelola produk untuk disewakan',
                             style: TextStyle(
                               color: Colors.white70,
-                              fontSize: res.sp(13),
+                              fontSize: res.sp(12),
                               fontWeight: FontWeight.w400,
                             ),
                           ),

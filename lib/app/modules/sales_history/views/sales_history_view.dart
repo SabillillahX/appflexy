@@ -348,7 +348,7 @@ class SalesHistoryView extends StatelessWidget {
               'Belum ada riwayat penjualan',
               style: TextStyle(
                 color: textPrimary,
-                fontSize: res.sp(20),
+                fontSize: res.sp(18),
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -357,7 +357,7 @@ class SalesHistoryView extends StatelessWidget {
               'Transaksi penjualan akan muncul di sini setelah Anda melakukan penjualan',
               style: TextStyle(
                 color: textSecondary,
-                fontSize: res.sp(14),
+                fontSize: res.sp(12),
                 fontWeight: FontWeight.w400,
               ),
               textAlign: TextAlign.center,

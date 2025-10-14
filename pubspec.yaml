@@ -57,6 +57,8 @@ flutter:
     - family: Pacifico
       fonts:
         - asset: assets/fonts/Pacifico.ttf
-        - asset: assets/fonts/Montserrat-VariableFont_wght.ttf
-        - asset: assets/fonts/Inter_18pt-BoldItalic.ttf
-        - asset: assets/fonts/Inter_18pt-ExtraBold.ttf
+
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Regular.ttf
+        

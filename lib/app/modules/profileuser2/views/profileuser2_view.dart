@@ -52,6 +52,7 @@ class Profileuser2View extends StatelessWidget {
               color: Colors.white,
             ),
           ),
+          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           child: Stack(
@@ -172,7 +173,7 @@ class Profileuser2View extends StatelessWidget {
                                           Text(
                                             'Statistik Penjualan',
                                             style: TextStyle(
-                                              fontSize: res.sp(16),
+                                              fontSize: res.sp(14),
                                               fontWeight: FontWeight.w700,
                                               color: textPrimary,
                                             ),
@@ -509,7 +510,7 @@ class Profileuser2View extends StatelessWidget {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: res.sp(15),
+                      fontSize: res.sp(14),
                       fontWeight: FontWeight.w600,
                       color: isLogout ? Colors.red : textPrimary,
                     ),

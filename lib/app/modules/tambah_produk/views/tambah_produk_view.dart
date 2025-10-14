@@ -111,7 +111,12 @@ class _TambahProdukViewState extends State<TambahProdukView> {
         ),
         child: SafeArea(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(res.wp(5), res.hp(0.5), res.wp(5), res.hp(1.5)),
+            padding: EdgeInsets.only(
+              left: res.wp(4),
+              right: res.wp(4),
+              bottom: res.hp(1),
+              top: res.hp(1),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -136,7 +141,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                             widget.produk == null ? 'Tambah Produk' : 'Edit Produk',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: res.sp(20),
+                              fontSize: res.sp(18),
                               fontWeight: FontWeight.w700,
                               letterSpacing: -0.5,
                             ),
@@ -148,7 +153,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                                 : 'Edit informasi produk',
                             style: TextStyle(
                               color: Colors.white70,
-                              fontSize: res.sp(13),
+                              fontSize: res.sp(12),
                               fontWeight: FontWeight.w400,
                             ),
                           ),
@@ -204,7 +209,6 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                 controller: controller.namaProdukController,
                 label: 'Nama Produk',
                 hint: 'Masukkan nama produk',
-                icon: Bootstrap.box,
                 res: res,
               ),
               SizedBox(height: res.hp(2.5)),
@@ -214,7 +218,6 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                 controller: controller.kodeProdukController,
                 label: 'Kode Produk',
                 hint: 'Masukkan kode produk',
-                icon: Bootstrap.tags,
                 res: res,
               ),
               SizedBox(height: res.hp(2.5)),
@@ -236,7 +239,6 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                 controller: controller.hargaJualController,
                 label: 'Harga Sewa',
                 hint: 'Masukkan harga sewa',
-                icon: IonIcons.cash,
                 keyboardType: TextInputType.number,
                 res: res,
               ),
@@ -247,7 +249,6 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                 controller: controller.keteranganController,
                 label: 'Keterangan Produk',
                 hint: 'Masukkan keterangan produk (opsional)',
-                icon: Bootstrap.chat_text_fill,
                 maxLines: 4,
                 res: res,
               ),
@@ -262,7 +263,6 @@ class _TambahProdukViewState extends State<TambahProdukView> {
     required TextEditingController controller,
     required String label,
     required String hint,
-    required IconData icon,
     required AutoResponsive res,
     TextInputType? keyboardType,
     int maxLines = 1,
@@ -274,7 +274,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
           label,
           style: TextStyle(
             color: textPrimary,
-            fontSize: res.sp(14),
+            fontSize: res.sp(13),
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -290,7 +290,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
             keyboardType: keyboardType,
             maxLines: maxLines,
             style: TextStyle(
-              fontSize: res.sp(14),
+              fontSize: res.sp(12),
               color: textPrimary,
               fontWeight: FontWeight.w500,
             ),
@@ -298,13 +298,8 @@ class _TambahProdukViewState extends State<TambahProdukView> {
               hintText: hint,
               hintStyle: TextStyle(
                 color: textSecondary,
-                fontSize: res.sp(14),
+                fontSize: res.sp(12),
                 fontWeight: FontWeight.w400,
-              ),
-              prefixIcon: Icon(
-                icon,
-                color: primaryBlue,
-                size: res.sp(20),
               ),
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(
@@ -354,7 +349,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                     ? 'Pilih kategori produk'
                     : controller.kategoriController.text,
                   style: TextStyle(
-                    fontSize: res.sp(14),
+                    fontSize: res.sp(12),
                     color: controller.kategoriController.text.isEmpty
                       ? textSecondary
                       : textPrimary,
@@ -439,7 +434,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                       Text(
                         'Stok',
                         style: TextStyle(
-                          fontSize: res.sp(14),
+                          fontSize: res.sp(12),
                           color: textSecondary,
                           fontWeight: FontWeight.w400,
                         ),
@@ -645,7 +640,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                       ),
                       child: Icon(
                         Bootstrap.image,
-                        size: res.wp(8),
+                        size: res.wp(6),
                         color: primaryBlue,
                       ),
                     ),
@@ -659,7 +654,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                           ? 'Ganti Foto Produk'
                           : 'Masukkan Foto Produk',
                         style: TextStyle(
-                          fontSize: res.sp(14),
+                          fontSize: res.sp(12),
                           fontWeight: FontWeight.w500,
                           color: textPrimary,
                         ),
@@ -668,7 +663,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                       Text(
                         'Format: JPG, PNG',
                         style: TextStyle(
-                          fontSize: res.sp(12),
+                          fontSize: res.sp(11),
                           color: textSecondary,
                         ),
                       ),
@@ -750,7 +745,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
               Text(
                 'Tambahkan Produk',
                 style: TextStyle(
-                  fontSize: res.sp(16),
+                  fontSize: res.sp(14),
                   fontWeight: FontWeight.w600,
                 ),
               ),

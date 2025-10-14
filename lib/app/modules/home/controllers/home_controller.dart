@@ -100,7 +100,7 @@ class HomeController extends GetxController {
     }
   }
 
-  void fetchLineChartData(String filter) async {
+  Future<void> fetchLineChartData(String filter) async {
     isLoadingLineChart.value = true;
     try {
       final token = getToken();
