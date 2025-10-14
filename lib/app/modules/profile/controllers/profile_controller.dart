@@ -78,8 +78,6 @@ class ProfileController extends GetxController {
     box.write('companyName', companyName.value);
     box.write('companyType', companyType.value);
     box.write('companyAddress', companyAddress.value);
-    if (imagePath.value.isNotEmpty) {
-      box.write('imagePath', imagePath.value);
-    }
+    box.write('companyImagePath', imagePath.value);
   }
 }

@@ -14,9 +14,12 @@
 /// ```
 class ApiConstants {
   // Base URLs
-  static const String baseUrl = 'http://10.0.2.2:8000/api';
-  static const String storageUrl = 'http://10.0.2.2:8000/storage';
-  static const String mainUrl = 'http://127.0.0.1:8000';
+  static const String baseUrl = 'https://sabil.sofine.my.id/api';
+  // static const String baseUrl = 'http://10.0.2.2:8000/api';
+  // static const String storageUrl = 'http://10.0.2.2:8000/storage';
+  static const String storageUrl = 'https://sabil.sofine.my.id/storage';
+  // static const String mainUrl = 'http://127.0.0.1:8000';
+  static const String mainUrl = 'https://sabil.sofine.my.id/';
   // API endpoints
   static const String products = '/products';
   static const String tikets = '/tikets';
@@ -70,5 +73,18 @@ class ApiConstants {
       path = path.substring(1);
     }
     return '$mainUrl/$path';
+  }
+
+  /// Menggabungkan baseUrl dengan path untuk akses gambar melalui API.
+  ///
+  /// Method ini digunakan untuk mengakses gambar melalui API endpoint yang memerlukan authentication.
+  ///
+  /// @param path Path gambar yang akan digabungkan dengan baseUrl
+  /// @return URL API untuk akses gambar
+  static String getImageApiUrl(String path) {
+    if (path.startsWith('/')) {
+      path = path.substring(1);
+    }
+    return '$baseUrl/image/$path';
   }
 }
