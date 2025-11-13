@@ -50,10 +50,20 @@ class EditProdukController extends GetxController {
         selectedImage = File(pickedFile.path);
         update();
       } else {
-        Get.snackbar('No Image Selected', 'Please select an image');
+        Get.snackbar(
+          'Tidak ada gambar terpilih',
+          'Pilih salah satu gambar.',
+          backgroundColor: Colors.red.withOpacity(0.9),
+          colorText: Colors.white,
+        );
       }
     } catch (error) {
-      Get.snackbar('Error', 'Failed to pick image: $error');
+      Get.snackbar(
+        'Error',
+        'Gagal mengambil gambar: $error',
+        backgroundColor: Colors.red.withOpacity(0.9),
+        colorText: Colors.white,
+      );
     }
   }
   Future<void> updateProduct(int productId) async {
@@ -62,7 +72,12 @@ class EditProdukController extends GetxController {
 
     // Validasi input
     if (namaProdukController.text.isEmpty) {
-      Get.snackbar('Error', 'Nama Produk tidak boleh kosong');
+      Get.snackbar(
+        'Error',
+        'Nama Produk tidak boleh kosong',
+        backgroundColor: Colors.red.withOpacity(0.9),
+        colorText: Colors.white,
+      );
       return;
     }
 
@@ -94,14 +109,29 @@ class EditProdukController extends GetxController {
       final responseData = await http.Response.fromStream(response);
 
       if (response.statusCode == 200) {
-        Get.snackbar('Success', 'Product updated successfully');
+        Get.snackbar(
+          'Berhasil',
+          'Produk berhasil diperbarui',
+          backgroundColor: Colors.green.withOpacity(0.9),
+          colorText: Colors.white,
+        );
       } else {
-        print('Failed with status: ${response.statusCode}');
-        print('Response body: ${responseData.body}');
-        Get.snackbar('Error', 'Failed to update product: ${responseData.body}');
+        print('Failed with status: \\${response.statusCode}');
+        print('Response body: \\${responseData.body}');
+        Get.snackbar(
+          'Error',
+          'Gagal memperbarui produk',
+          backgroundColor: Colors.red.withOpacity(0.9),
+          colorText: Colors.white,
+        );
       }
     } catch (error) {
-      Get.snackbar('Error', 'An error occurred: $error');
+      Get.snackbar(
+        'Error',
+        'Terdapat error yang tidak diketahui',
+        backgroundColor: Colors.red.withOpacity(0.9),
+        colorText: Colors.white,
+      );
     }
   }
 

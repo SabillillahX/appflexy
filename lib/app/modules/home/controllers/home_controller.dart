@@ -22,9 +22,76 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     print('HomeController onInit dipanggil');
+    
+    // Setup worker untuk monitor perubahan filter
+    ever(selectedLineChartFilter, (String filter) {
+      print('Filter berubah ke: $filter - fetching new data');
+      fetchLineChartData(filter);
+    });
+    
+    // Hanya inisialisasi data awal di onInit
     fetchCompanyDetails();
     fetchLineChartData(selectedLineChartFilter.value);
     fetchRecentTransactions();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    print('HomeController onReady dipanggil - halaman siap ditampilkan');
+    // Refresh data setiap kali halaman siap ditampilkan
+    refreshAllData();
+  }
+
+  // Method untuk refresh semua data
+  Future<void> refreshAllData() async {
+    print('=== REFRESH ALL DATA ===');
+    print('Current filter: ${selectedLineChartFilter.value}');
+    print('Current chart data length: ${lineChartData.length}');
+    print('Current transactions length: ${recentTransactions.length}');
+    
+    // Refresh semua data secara paralel untuk performa yang lebih baik
+    await Future.wait([
+      fetchCompanyDetails(),
+      fetchLineChartData(selectedLineChartFilter.value),
+      fetchRecentTransactions(),
+    ]);
+    
+    print('All data refreshed successfully');
+    print('New chart data length: ${lineChartData.length}');
+    print('New transactions length: ${recentTransactions.length}');
+  }
+
+  // Method untuk check dan auto-refresh jika data kosong
+  Future<void> ensureDataLoaded() async {
+    print('=== ENSURE DATA LOADED ===');
+    
+    bool needsRefresh = false;
+    
+    // Check jika line chart data kosong
+    if (lineChartData.isEmpty && !isLoadingLineChart.value) {
+      print('Line chart data kosong, perlu refresh');
+      needsRefresh = true;
+    }
+    
+    // Check jika transactions kosong
+    if (recentTransactions.isEmpty && !isLoadingRecentTransactions.value) {
+      print('Recent transactions kosong, perlu refresh');
+      needsRefresh = true;
+    }
+    
+    // Check jika store data kosong
+    if (storeData.value == null && !isLoading.value) {
+      print('Store data kosong, perlu refresh');
+      needsRefresh = true;
+    }
+    
+    if (needsRefresh) {
+      print('Melakukan refresh karena ada data yang kosong');
+      await refreshAllData();
+    } else {
+      print('Semua data sudah tersedia, tidak perlu refresh');
+    }
   }
 
   String? getToken() => box.read('token');
@@ -101,6 +168,20 @@ class HomeController extends GetxController {
   }
 
   Future<void> fetchLineChartData(String filter) async {
+    print('=== FETCH LINE CHART DATA ===');
+    print('Filter received: $filter');
+    print('Current selectedLineChartFilter: ${selectedLineChartFilter.value}');
+    print('Current data length: ${lineChartData.length}');
+    
+    // Update selected filter jika berbeda
+    if (selectedLineChartFilter.value != filter) {
+      selectedLineChartFilter.value = filter;
+      print('Filter updated to: $filter');
+    }
+    
+    // Clear existing data sebelum fetching yang baru
+    lineChartData.clear();
+    
     isLoadingLineChart.value = true;
     try {
       final token = getToken();
@@ -147,7 +228,10 @@ class HomeController extends GetxController {
         
         if (filter == 'day') {
           _processDataByDay(userOrders);
+        } else if (filter == 'two_months') {
+          _processDataByTwoMonths(userOrders);
         } else {
+          // Default ke two_months jika filter tidak dikenali
           _processDataByTwoMonths(userOrders);
         }
       } else {

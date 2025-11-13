@@ -11,6 +11,7 @@ class Profileuser2Controller extends GetxController {
   // Observable for company details
   var companyName = ''.obs;
   var companyLogo = ''.obs; // Path for logo
+  var isLoading = true.obs; // Loading state
 
   @override
   void onInit() {
@@ -21,6 +22,7 @@ class Profileuser2Controller extends GetxController {
   // Fetch company details from the API
   Future<void> fetchCompanyDetails() async {
     try {
+      isLoading.value = true; // Set loading to true
       final response =
           await http.get(Uri.parse(ApiConstants.getFullUrl(ApiConstants.stores)));
 
@@ -54,6 +56,8 @@ class Profileuser2Controller extends GetxController {
     } catch (e) {
       print('Error fetching store details: $e');
       Get.snackbar('Error', 'Failed to load store details');
+    } finally {
+      isLoading.value = false; // Set loading to false after request
     }
   }
 

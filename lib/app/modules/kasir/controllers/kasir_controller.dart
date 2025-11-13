@@ -37,9 +37,15 @@ class KasirController extends GetxController {
   RxList<RxInt> localQuantities = <RxInt>[].obs;
   var selectedPaymentMethod = ''.obs;
   var _total = 0.0.obs;
+  var uangTunai = 0.0.obs; // Tambah untuk uang tunai
+  var kembalian = 0.0.obs; // Tambah untuk kembalian
 
   set total(double value) => _total.value = value;
   double get totalValue => _total.value;
+
+  // Setter dan getter untuk uang tunai dan kembalian
+  void setUangTunai(double value) => uangTunai.value = value;
+  void setKembalian(double value) => kembalian.value = value;
 
   @override
   void onInit() {
@@ -106,6 +112,8 @@ class KasirController extends GetxController {
         'time': DateTime.now().toIso8601String(),
         'payment_method': selectedPaymentMethod.value,
         'total': _total.value,
+        'uang_tunai': uangTunai.value, // Tambah uang tunai
+        'kembalian': kembalian.value, // Tambah kembalian
         'items': items
       };      final response = await http.post(
         Uri.parse(ApiConstants.getFullUrl(ApiConstants.orders)),

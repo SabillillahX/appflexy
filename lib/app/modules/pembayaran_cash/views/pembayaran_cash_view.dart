@@ -517,6 +517,10 @@ class _PembayaranCashViewState extends State<PembayaranCashView> {
           } else {
             final kembalian = jumlahUang - totalHarga;
 
+            // Set uang tunai dan kembalian ke kasir controller
+            kasirController.setUangTunai(jumlahUang);
+            kasirController.setKembalian(kembalian);
+
             Get.to(() => StrukPembayaranPage(
               totalPembelian: totalHarga,
               uangTunai: jumlahUang,

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gap/gap.dart';
-import 'package:icons_plus/icons_plus.dart';
 import 'package:apptiket/app/modules/tambah_tiket/controllers/tambah_tiket_controller.dart';
 import 'package:apptiket/app/core/utils/auto_responsive.dart';
 
@@ -27,9 +25,7 @@ class _TambahTiketViewState extends State<TambahTiketView> {
 
   // Modern color palette - sama dengan home_view.dart
   static const Color primaryBlue = Color(0xff181681);
-  static const Color lightBlue = Color(0xFFE8E9FF);
   static const Color darkBlue = Color(0xff0F0B5C);
-  static const Color accentBlue = Color(0xff2A23A3);
   static const Color backgroundColor = Color(0xFFFAFAFA);
   static const Color cardColor = Colors.white;
   static const Color textPrimary = Color(0xFF1F2937);
@@ -245,7 +241,6 @@ class _TambahTiketViewState extends State<TambahTiketView> {
             controller: namaTiketController,
             label: 'Nama Tiket',
             hint: 'Masukkan nama tiket',
-            icon: Icons.confirmation_num_outlined,
             res: res,
           ),
           
@@ -257,14 +252,7 @@ class _TambahTiketViewState extends State<TambahTiketView> {
           SizedBox(height: res.hp(2.5)),
 
           // Harga Jual Field
-          _buildModernTextField(
-            controller: hargaJualController,
-            label: 'Harga Jual',
-            hint: 'Masukkan harga jual',
-            icon: Icons.attach_money,
-            keyboardType: TextInputType.number,
-            res: res,
-          ),
+          _buildModernHargaField(res),
           
           SizedBox(height: res.hp(2.5)),
 
@@ -273,7 +261,6 @@ class _TambahTiketViewState extends State<TambahTiketView> {
             controller: keteranganController,
             label: 'Keterangan Tiket',
             hint: 'Masukkan keterangan tiket',
-            icon: Icons.description_outlined,
             maxLines: 4,
             res: res,
           ),
@@ -286,7 +273,6 @@ class _TambahTiketViewState extends State<TambahTiketView> {
     required TextEditingController controller,
     required String label,
     required String hint,
-    required IconData icon,
     required AutoResponsive res,
     TextInputType? keyboardType,
     int maxLines = 1,
@@ -325,12 +311,70 @@ class _TambahTiketViewState extends State<TambahTiketView> {
                 fontSize: res.sp(14),
                 fontWeight: FontWeight.w400,
               ),
-              prefixIcon: Icon(
-                icon,
-                color: primaryBlue,
-                size: res.sp(20),
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: res.wp(4),
+                vertical: res.hp(1.5),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildModernHargaField(AutoResponsive res) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Harga Jual',
+          style: TextStyle(
+            color: textPrimary,
+            fontSize: res.sp(14),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SizedBox(height: res.hp(0.8)),
+        Container(
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: borderColor),
+          ),
+          child: TextField(
+            controller: hargaJualController,
+            keyboardType: TextInputType.number,
+            style: TextStyle(
+              fontSize: res.sp(14),
+              color: textPrimary,
+              fontWeight: FontWeight.w500,
+            ),
+            decoration: InputDecoration(
+              hintText: 'Masukkan harga jual',
+              hintStyle: TextStyle(
+                color: textSecondary,
+                fontSize: res.sp(14),
+                fontWeight: FontWeight.w400,
               ),
               border: InputBorder.none,
+              prefixIcon: Container(
+                padding: EdgeInsets.all(res.wp(3)),
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: res.wp(2),
+                    vertical: res.hp(0.5),
+                  ),
+                  child: Text(
+                    'Rp',
+                    style: TextStyle(
+                      color: primaryBlue,
+                      fontSize: res.sp(12),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: res.wp(4),
                 vertical: res.hp(1.5),
@@ -365,13 +409,6 @@ class _TambahTiketViewState extends State<TambahTiketView> {
           ),
           child: Row(
             children: [
-              Icon(
-                Icons.inventory_2_outlined,
-                color: primaryBlue,
-                size: res.sp(20),
-              ),
-              SizedBox(width: res.wp(3)),
-              
               Expanded(
                 child: GestureDetector(
                   onTap: () {
@@ -651,71 +688,7 @@ class _TambahTiketViewState extends State<TambahTiketView> {
     }
   }
 
-  void _showSuccessNotification(String message) {
-    final res = AutoResponsive(context);
-    
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Container(
-          padding: EdgeInsets.symmetric(vertical: res.hp(0.5)),
-          child: Row(
-            children: [
-              Container(
-                width: res.wp(8),
-                height: res.wp(8),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Icon(
-                  Icons.check,
-                  color: Colors.white,
-                  size: res.sp(16),
-                ),
-              ),
-              SizedBox(width: res.wp(3)),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Berhasil!',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: res.sp(14),
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      message,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
-                        fontSize: res.sp(12),
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        backgroundColor: primaryBlue,
-        duration: Duration(seconds: 3),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        margin: EdgeInsets.fromLTRB(
-          res.wp(4), 
-          0, 
-          res.wp(4), 
-          res.hp(12), // Posisi lebih tinggi agar tidak tertutup bottom nav
-        ),
-      ),
-    );
-  }
+
 
   @override
   void dispose() {

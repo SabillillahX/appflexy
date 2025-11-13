@@ -326,16 +326,62 @@ class _KasirViewState extends State<KasirView> {
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('Konfirmasi'),
-                                  content:
-                                      Text('Hapus item ini dari keranjang?'),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  backgroundColor: Colors.white,
+                                  title: Row(
+                                    children: [
+                                      Icon(Icons.warning_rounded,
+                                          color: Colors.red.shade400, size: 26),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        'Konfirmasi',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff181681),
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  content: Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(vertical: 8.0),
+                                    child: Text(
+                                      'Hapus item ini dari keranjang?',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ),
+                                  actionsPadding:
+                                      EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                   actions: [
                                     TextButton(
+                                      style: TextButton.styleFrom(
+                                        foregroundColor: Colors.grey[700],
+                                        textStyle: TextStyle(fontWeight: FontWeight.w600),
+                                        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                      ),
                                       child: Text('Batal'),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(),
+                                      onPressed: () => Navigator.of(context).pop(),
                                     ),
-                                    TextButton(
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red.shade600,
+                                        foregroundColor: Colors.white,
+                                        textStyle: TextStyle(fontWeight: FontWeight.w600),
+                                        padding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8),
+                                        ),
+                                        elevation: 0,
+                                      ),
                                       child: Text('Hapus'),
                                       onPressed: () {
                                         Navigator.of(context).pop();
@@ -518,27 +564,27 @@ class _KasirViewState extends State<KasirView> {
                     Navigator.pop(context);
                   },
                 ),
-                ListTile(
-                  leading: Icon(Icons.qr_code_scanner,
-                      color: const Color(0xff181681), size: res.sp(20)),
-                  title: Text('QRIS', style: TextStyle(fontSize: res.sp(15))),
-                  onTap: () {
-                    setState(() => selectedPaymentMethod = 'QRIS');
-                    controller.setPaymentMethod('QRIS');
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.payment,
-                      color: const Color(0xff181681), size: res.sp(20)),
-                  title: Text('Midtrans QRIS',
-                      style: TextStyle(fontSize: res.sp(15))),
-                  onTap: () {
-                    setState(() => selectedPaymentMethod = 'Midtrans');
-                    controller.setPaymentMethod('Midtrans');
-                    Navigator.pop(context);
-                  },
-                ),
+                // ListTile(
+                //   leading: Icon(Icons.qr_code_scanner,
+                //       color: const Color(0xff181681), size: res.sp(20)),
+                //   title: Text('QRIS', style: TextStyle(fontSize: res.sp(15))),
+                //   onTap: () {
+                //     setState(() => selectedPaymentMethod = 'QRIS');
+                //     controller.setPaymentMethod('QRIS');
+                //     Navigator.pop(context);
+                //   },
+                // ),
+                // ListTile(
+                //   leading: Icon(Icons.payment,
+                //       color: const Color(0xff181681), size: res.sp(20)),
+                //   title: Text('Midtrans QRIS',
+                //       style: TextStyle(fontSize: res.sp(15))),
+                //   onTap: () {
+                //     setState(() => selectedPaymentMethod = 'Midtrans');
+                //     controller.setPaymentMethod('Midtrans');
+                //     Navigator.pop(context);
+                //   },
+                // ),
               ],
             ),
           ),
@@ -552,7 +598,7 @@ class _KasirViewState extends State<KasirView> {
       Get.snackbar(
         'Pilih Metode Pembayaran',
         'Silakan pilih metode pembayaran sebelum melanjutkan',
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
       );
       return;
     }
@@ -561,7 +607,7 @@ class _KasirViewState extends State<KasirView> {
       Get.snackbar(
         'Keranjang Kosong',
         'Silakan tambahkan item ke keranjang',
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
       );
       return;
     }

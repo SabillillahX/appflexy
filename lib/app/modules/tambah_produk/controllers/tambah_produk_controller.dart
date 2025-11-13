@@ -17,9 +17,10 @@ class TambahProdukController extends GetxController {
   final TextEditingController kategoriController = TextEditingController();
 
   File? selectedImage;
+  String? existingImage; // Tambah properti untuk gambar existing
   final ImagePicker picker = ImagePicker();
   final box = GetStorage();
-  
+
   // Observable states - sama seperti TambahTiketController
   var isLoading = false.obs;
   var errorMessage = ''.obs;
@@ -35,13 +36,23 @@ class TambahProdukController extends GetxController {
       hargaJualController.text = produk['hargaJual']?.toString() ?? '';
       keteranganController.text = produk['keterangan'] ?? '';
       kategoriController.text = produk['kategori'] ?? '';
-      
-      // Handle existing image if any
-      if (produk['image'] != null && produk['image'].toString().isNotEmpty) {
-        // Set existing image info if needed
-        print('Existing image: ${produk['image']}');
-      }
+      existingImage = produk['image']; // Set gambar existing
+      update();
     }
+  }
+
+  // Fungsi untuk cek apakah ada gambar (selected atau existing)
+  bool hasImage() {
+    return selectedImage != null ||
+        (existingImage != null && existingImage!.isNotEmpty);
+  }
+
+  // Fungsi untuk mendapatkan URL gambar dari database
+  String? getImageUrl() {
+    if (existingImage != null && existingImage!.isNotEmpty) {
+      return ApiConstants.getStorageUrl(existingImage!);
+    }
+    return null;
   }
 
   Future<void> pickImage() async {
@@ -52,22 +63,10 @@ class TambahProdukController extends GetxController {
         maxWidth: 1024,
         maxHeight: 1024,
       );
-      
+
       if (pickedFile != null) {
         selectedImage = File(pickedFile.path);
         update(); // Refresh UI after selecting image
-        
-        Get.snackbar(
-          'Berhasil',
-          'Gambar berhasil dipilih',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
-          icon: Icon(Icons.check_circle, color: Colors.white),
-          duration: Duration(seconds: 1),
-          margin: EdgeInsets.all(16),
-          borderRadius: 12,
-        );
       }
     } catch (error) {
       print('Error picking image: $error');
@@ -77,7 +76,6 @@ class TambahProdukController extends GetxController {
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,
-        icon: Icon(Icons.error, color: Colors.white),
         duration: Duration(seconds: 3),
         margin: EdgeInsets.all(16),
         borderRadius: 12,
@@ -95,7 +93,8 @@ class TambahProdukController extends GetxController {
         throw Exception('Authentication required');
       }
 
-      final Uri apiUrl = Uri.parse(ApiConstants.getFullUrl(ApiConstants.products));
+      final Uri apiUrl =
+          Uri.parse(ApiConstants.getFullUrl(ApiConstants.products));
       final request = http.MultipartRequest('POST', apiUrl);
 
       // Add headers
@@ -136,18 +135,17 @@ class TambahProdukController extends GetxController {
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.green,
           colorText: Colors.white,
-          icon: Icon(Icons.check_circle, color: Colors.white),
           duration: Duration(seconds: 2),
           margin: EdgeInsets.all(16),
           borderRadius: 12,
         );
-        
+
         // Refresh daftar produk jika controller terdaftar
         if (Get.isRegistered<DaftarKasirController>()) {
           final daftarKasirController = Get.find<DaftarKasirController>();
           daftarKasirController.fetchProdukList();
         }
-        
+
         clearFields();
         return true;
       } else {
@@ -155,14 +153,13 @@ class TambahProdukController extends GetxController {
         final errorData = json.decode(responseData.body);
         final errorMsg = errorData['message'] ?? 'Gagal menambahkan produk';
         errorMessage.value = errorMsg;
-        
+
         Get.snackbar(
           'Error',
           errorMsg,
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.red,
           colorText: Colors.white,
-          icon: Icon(Icons.error, color: Colors.white),
           duration: Duration(seconds: 3),
           margin: EdgeInsets.all(16),
           borderRadius: 12,
@@ -172,14 +169,13 @@ class TambahProdukController extends GetxController {
     } catch (e) {
       print('Error adding product: $e');
       errorMessage.value = 'Terjadi kesalahan: ${e.toString()}';
-      
+
       Get.snackbar(
         'Error',
         'Terjadi kesalahan saat menambahkan produk',
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,
-        icon: Icon(Icons.error, color: Colors.white),
         duration: Duration(seconds: 3),
         margin: EdgeInsets.all(16),
         borderRadius: 12,
@@ -190,35 +186,38 @@ class TambahProdukController extends GetxController {
     }
   }
 
-  Future<bool> updateProduct(int productId) async {
+  Future<void> updateProduct(int productId) async {
+    final Uri apiUrl = Uri.parse(
+        ApiConstants.getFullUrl('${ApiConstants.products}/$productId'));
+    final userId = box.read('user_id');
+
+    // Validasi input
+    if (namaProdukController.text.isEmpty) {
+      Get.snackbar(
+        'Error',
+        'Nama Produk tidak boleh kosong',
+        backgroundColor: Colors.red.withOpacity(0.9),
+        colorText: Colors.white,
+      );
+      return;
+    }
+
     try {
-      isLoading.value = true;
-      errorMessage.value = '';
+      final request = http.MultipartRequest('POST', apiUrl);
 
-      final userId = box.read('user_id');
-      if (token == null || userId == null) {
-        throw Exception('Authentication required');
-      }
+      // Simulasi PUT
+      request.fields['_method'] = 'PUT';
 
-      final Uri apiUrl = Uri.parse(ApiConstants.getFullUrl('${ApiConstants.products}/$productId'));
-      final request = http.MultipartRequest('PUT', apiUrl);
-
-      // Add headers
-      request.headers.addAll({
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      });
-
-      // Add text fields
-      request.fields['namaProduk'] = namaProdukController.text.trim();
-      request.fields['kodeProduk'] = kodeProdukController.text.trim();
-      request.fields['stok'] = stokController.text.trim();
-      request.fields['hargaJual'] = hargaJualController.text.trim();
-      request.fields['keterangan'] = keteranganController.text.trim();
-      request.fields['kategori'] = kategoriController.text.trim();
+      // Tambah field teks
+      request.fields['namaProduk'] = namaProdukController.text;
+      request.fields['kodeProduk'] = kodeProdukController.text;
+      request.fields['stok'] = stokController.text;
+      request.fields['hargaJual'] = hargaJualController.text;
+      request.fields['keterangan'] = keteranganController.text;
+      request.fields['kategori'] = kategoriController.text;
       request.fields['user_id'] = userId.toString();
 
-      // Add image if selected (new image)
+      // Tambahkan gambar jika ada
       if (selectedImage != null) {
         request.files.add(await http.MultipartFile.fromPath(
           'image',
@@ -226,71 +225,34 @@ class TambahProdukController extends GetxController {
         ));
       }
 
-      // Send the request
+      // Kirim request
       final response = await request.send();
       final responseData = await http.Response.fromStream(response);
 
-      print('Update product response status: ${response.statusCode}');
-      print('Update product response body: ${responseData.body}');
-
       if (response.statusCode == 200) {
-        // Success snackbar
         Get.snackbar(
           'Berhasil',
-          'Produk berhasil diupdate!',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.green,
+          'Produk berhasil diperbarui',
+          backgroundColor: Colors.green.withOpacity(0.9),
           colorText: Colors.white,
-          icon: Icon(Icons.check_circle, color: Colors.white),
-          duration: Duration(seconds: 2),
-          margin: EdgeInsets.all(16),
-          borderRadius: 12,
         );
-        
-        // Refresh daftar produk jika controller terdaftar
-        if (Get.isRegistered<DaftarKasirController>()) {
-          final daftarKasirController = Get.find<DaftarKasirController>();
-          daftarKasirController.fetchProdukList();
-        }
-        
-        return true;
       } else {
-        // Error response
-        final errorData = json.decode(responseData.body);
-        final errorMsg = errorData['message'] ?? 'Gagal mengupdate produk';
-        errorMessage.value = errorMsg;
-        
+        print('Failed with status: \\${response.statusCode}');
+        print('Response body: \\${responseData.body}');
         Get.snackbar(
           'Error',
-          errorMsg,
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.red,
+          'Gagal memperbarui produk',
+          backgroundColor: Colors.red.withOpacity(0.9),
           colorText: Colors.white,
-          icon: Icon(Icons.error, color: Colors.white),
-          duration: Duration(seconds: 3),
-          margin: EdgeInsets.all(16),
-          borderRadius: 12,
         );
-        return false;
       }
-    } catch (e) {
-      print('Error updating product: $e');
-      errorMessage.value = 'Terjadi kesalahan: ${e.toString()}';
-      
+    } catch (error) {
       Get.snackbar(
         'Error',
-        'Terjadi kesalahan saat mengupdate produk',
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.red,
+        'Terdapat error yang tidak diketahui',
+        backgroundColor: Colors.red.withOpacity(0.9),
         colorText: Colors.white,
-        icon: Icon(Icons.error, color: Colors.white),
-        duration: Duration(seconds: 3),
-        margin: EdgeInsets.all(16),
-        borderRadius: 12,
       );
-      return false;
-    } finally {
-      isLoading.value = false;
     }
   }
 
@@ -300,27 +262,31 @@ class TambahProdukController extends GetxController {
       errorMessage.value = "Nama produk harus diisi!";
       return false;
     }
-    
+
     if (kodeProdukController.text.trim().isEmpty) {
       errorMessage.value = "Kode produk harus diisi!";
       return false;
     }
-    
+
     if (kategoriController.text.trim().isEmpty) {
       errorMessage.value = "Kategori harus dipilih!";
       return false;
     }
-    
-    if (stokController.text.trim().isEmpty || int.tryParse(stokController.text) == null || int.parse(stokController.text) <= 0) {
+
+    if (stokController.text.trim().isEmpty ||
+        int.tryParse(stokController.text) == null ||
+        int.parse(stokController.text) <= 0) {
       errorMessage.value = "Stok harus lebih dari 0!";
       return false;
     }
-    
-    if (hargaJualController.text.trim().isEmpty || double.tryParse(hargaJualController.text) == null || double.parse(hargaJualController.text) <= 0) {
+
+    if (hargaJualController.text.trim().isEmpty ||
+        double.tryParse(hargaJualController.text) == null ||
+        double.parse(hargaJualController.text) <= 0) {
       errorMessage.value = "Harga sewa harus diisi dengan benar!";
       return false;
     }
-    
+
     return true;
   }
 

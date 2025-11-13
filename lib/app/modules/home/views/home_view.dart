@@ -14,16 +14,15 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView> with WidgetsBindingObserver {
   int _pageIndex = 0;
   final HomeController homeController = Get.put(HomeController());
+  bool _isInitialized = false;
 
   // Refresh function
   Future<void> refreshPage() async {
-    await homeController.fetchCompanyDetails();
-    await homeController
-        .fetchLineChartData(homeController.selectedLineChartFilter.value);
-    await homeController.fetchRecentTransactions();
+    print('Manual refresh dipanggil dari pull-to-refresh');
+    await homeController.refreshAllData();
     setState(() {}); // Optional: force rebuild if needed
   }
 
@@ -40,10 +39,44 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    homeController.fetchCompanyDetails();
-    homeController
-        .fetchLineChartData(homeController.selectedLineChartFilter.value);
-    homeController.fetchRecentTransactions();
+    print('HomeView initState dipanggil');
+    WidgetsBinding.instance.addObserver(this);
+    // Data akan diload oleh controller's onInit dan onReady
+    // Tidak perlu manual fetch di sini untuk menghindari double loading
+    _isInitialized = true;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('HomeView didChangeDependencies dipanggil');
+    // Pastikan data ter-load ketika dependencies berubah (misal setelah navigasi)
+    if (_isInitialized) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          print('Checking dan ensuring data loaded setelah dependencies berubah');
+          homeController.ensureDataLoaded();
+        }
+      });
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    print('App lifecycle state changed: $state');
+    
+    // Ensure data loaded ketika app kembali aktif dari background
+    if (state == AppLifecycleState.resumed && mounted) {
+      print('App resumed - ensuring data loaded');
+      homeController.ensureDataLoaded();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -69,15 +102,25 @@ class _HomeViewState extends State<HomeView> {
         bottomNavigationBar: CustomNavigationBar(
           currentIndex: _pageIndex,
           onTap: (index) {
+            if (index == 0) {
+              // Jika tap HOME tab
+              if (_pageIndex == 0) {
+                // Jika sudah di HOME, ensure data loaded
+                print('Tab HOME ditekan saat sudah di HOME - ensure data loaded');
+                homeController.ensureDataLoaded();
+              } else {
+                // Jika dari page lain ke HOME, gunakan offAllNamed
+                print('Navigasi dari page lain ke HOME');
+                Get.offAllNamed(Routes.HOME);
+              }
+            } else if (index == 1) {
+              Get.toNamed(Routes.DAFTAR_KASIR);
+            } else if (index == 2) {
+              Get.toNamed(Routes.PROFILEUSER2);
+            }
+            
             setState(() {
               _pageIndex = index;
-              if (index == 0) {
-                Get.offAllNamed(Routes.HOME);
-              } else if (index == 1) {
-                Get.toNamed(Routes.DAFTAR_KASIR);
-              } else if (index == 2) {
-                Get.toNamed(Routes.PROFILEUSER2);
-              }
             });
           },
         ),
@@ -602,14 +645,14 @@ class _HomeViewState extends State<HomeView> {
                       ),
                     ),
                     SizedBox(height: res.hp(0.3)),
-                    Text(
-                      'Grafik penjualan terkini',
+                    Obx(() => Text(
+                      'Grafik penjualan terkini (${homeController.selectedLineChartFilter.value == 'two_months' ? 'Per 2 Bulan' : 'Per Hari'})',
                       style: TextStyle(
                         color: textSecondary,
                         fontSize: res.sp(11),
                         fontWeight: FontWeight.w400,
                       ),
-                    ),
+                    )),
                   ],
                 ),
               ),
@@ -632,31 +675,43 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   elevation: 8,
                   onSelected: (value) {
+                    print('=== FILTER SELECTED ===');
+                    print('Selected filter: $value');
+                    print('Previous filter: ${homeController.selectedLineChartFilter.value}');
+                    
                     homeController.selectedLineChartFilter.value = value;
                     homeController.fetchLineChartData(value);
+                    
+                    print('Filter updated to: ${homeController.selectedLineChartFilter.value}');
                   },
                   itemBuilder: (context) => [
                     PopupMenuItem(
-                      value: 'Dua bulan',
-                      child: Row(
+                      value: 'two_months',
+                      child: Obx(() => Row(
                         children: [
                           Icon(Icons.calendar_view_month,
                               color: primaryBlue, size: 18),
                           SizedBox(width: 8),
                           Text('Per 2 Bulan'),
+                          Spacer(),
+                          if (homeController.selectedLineChartFilter.value == 'two_months')
+                            Icon(Icons.check, color: primaryBlue, size: 16),
                         ],
-                      ),
+                      )),
                     ),
                     PopupMenuItem(
-                      value: 'Hari',
-                      child: Row(
+                      value: 'day',
+                      child: Obx(() => Row(
                         children: [
                           Icon(Icons.calendar_today,
                               color: primaryBlue, size: 18),
                           SizedBox(width: 8),
                           Text('Per Hari'),
+                          Spacer(),
+                          if (homeController.selectedLineChartFilter.value == 'day')
+                            Icon(Icons.check, color: primaryBlue, size: 16),
                         ],
-                      ),
+                      )),
                     ),
                   ],
                 ),
@@ -700,6 +755,10 @@ class _HomeViewState extends State<HomeView> {
             }
 
             final data = homeController.lineChartData;
+            
+            print('Building chart with data length: ${data.length}');
+            print('Filter: ${homeController.selectedLineChartFilter.value}');
+            print('Loading state: ${homeController.isLoadingLineChart.value}');
 
             if (data.isEmpty) {
               return Container(

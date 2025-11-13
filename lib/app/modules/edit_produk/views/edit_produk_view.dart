@@ -73,13 +73,14 @@ class _EditProdukViewState extends State<EditProdukView> {
                         // Nama Produk
                         TextField(
                           controller: controller.namaProdukController,
-                          style: TextStyle(fontSize: res.sp(16)),
+                          style: TextStyle(fontSize: res.sp(12)),
                           decoration: InputDecoration(
                             hintText: 'Nama Produk',
+                            hintStyle: TextStyle(fontSize: res.sp(12)),
                             prefixIcon: Icon(
                               Bootstrap.box,
                               color: Color(0xff181681),
-                              size: res.sp(20),
+                              size: res.sp(15),
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(res.wp(3.5)),
@@ -96,13 +97,14 @@ class _EditProdukViewState extends State<EditProdukView> {
                         // Kode Produk
                         TextField(
                           controller: controller.kodeProdukController,
-                          style: TextStyle(fontSize: res.sp(16)),
+                          style: TextStyle(fontSize: res.sp(12)),
                           decoration: InputDecoration(
                             hintText: 'Kode Produk',
+                            hintStyle: TextStyle(fontSize: res.sp(12)),
                             prefixIcon: Icon(
                               Bootstrap.tags,
                               color: Color(0xff181681),
-                              size: res.sp(20),
+                              size: res.sp(15),
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(res.wp(3.5)),
@@ -129,7 +131,7 @@ class _EditProdukViewState extends State<EditProdukView> {
                                 child: Icon(
                                   Bootstrap.list,
                                   color: Color(0xff181681),
-                                  size: res.sp(20),
+                                  size: res.sp(15),
                                 ),
                               ),
                               SizedBox(width: res.wp(2)),
@@ -144,7 +146,7 @@ class _EditProdukViewState extends State<EditProdukView> {
                                       color: controller.kategoriController.text.isEmpty
                                           ? Colors.grey[600]
                                           : Colors.black,
-                                      fontSize: res.sp(16),
+                                      fontSize: res.sp(12),
                                     ),
                                   ),
                                 ),
@@ -163,7 +165,7 @@ class _EditProdukViewState extends State<EditProdukView> {
                                         value: choice,
                                         child: Text(
                                           choice,
-                                          style: TextStyle(fontSize: res.sp(16)),
+                                          style: TextStyle(fontSize: res.sp(12)),
                                         ),
                                       );
                                     }).toList();
@@ -191,14 +193,14 @@ class _EditProdukViewState extends State<EditProdukView> {
                                     Icon(
                                       Bootstrap.box2,
                                       color: Color(0xff181681),
-                                      size: res.sp(20),
+                                      size: res.sp(15),
                                     ),
                                     SizedBox(width: res.wp(2)),
                                     Text(
                                       'Stok',
                                       style: TextStyle(
                                         color: Color(0xff181681),
-                                        fontSize: res.sp(16),
+                                        fontSize: res.sp(12),
                                       ),
                                     ),
                                   ],
@@ -314,7 +316,7 @@ class _EditProdukViewState extends State<EditProdukView> {
                                         ? 'Ganti Foto Produk'
                                         : 'Foto Produk yang Baru',
                                     style: TextStyle(
-                                      fontSize: res.sp(16),
+                                      fontSize: res.sp(14),
                                       fontFamily: 'inter',
                                       fontStyle: FontStyle.normal,
                                     ),
@@ -329,7 +331,7 @@ class _EditProdukViewState extends State<EditProdukView> {
                         Text(
                           '*Ingin mengganti gambar? Pilih baru. Jika tidak, biarkan saja.',
                           style: TextStyle(
-                            fontSize: res.sp(14),
+                            fontSize: res.sp(11),
                             color: const Color.fromARGB(255, 80, 79, 79),
                           ),
                         ),
@@ -338,13 +340,13 @@ class _EditProdukViewState extends State<EditProdukView> {
                         // Harga Sewa
                         TextField(
                           controller: controller.hargaJualController,
-                          style: TextStyle(fontSize: res.sp(16)),
+                          style: TextStyle(fontSize: res.sp(14)),
                           decoration: InputDecoration(
                             hintText: 'Harga Sewa',
                             prefixIcon: Icon(
                               IonIcons.cash,
                               color: Color(0xff181681),
-                              size: res.sp(20),
+                              size: res.sp(15),
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(res.wp(3.5)),
@@ -362,7 +364,7 @@ class _EditProdukViewState extends State<EditProdukView> {
                         // Keterangan
                         TextField(
                           controller: controller.keteranganController,
-                          style: TextStyle(fontSize: res.sp(16)),
+                          style: TextStyle(fontSize: res.sp(12)),
                           decoration: InputDecoration(
                             hintText: 'Keterangan Produk (opsional)',
                             border: OutlineInputBorder(

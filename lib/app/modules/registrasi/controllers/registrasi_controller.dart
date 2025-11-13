@@ -140,11 +140,12 @@ class RegistrasiController extends GetxController {
         box.write('token', token);
         box.write('user_id', userId);
         box.write('isRegistered', true);
-        box.write('needsProfile', true); // Add this flag
-        box.remove('store_id'); // Remove store_id if exists
+        box.write('needsProfile', true);
+        box.remove('store_id');
 
         print('Token: $token');
-        print('User ID: $userId');        Get.snackbar('Success', 'Registration successful!',
+        print('User ID: $userId');
+        Get.snackbar('Success', 'Registration successful!',
             icon: Icon(
               Icons.check,
               color: Colors.green,
@@ -176,7 +177,8 @@ class RegistrasiController extends GetxController {
       Navigator.of(Get.context!).pop();
     } finally {
       isLoading(false);
-    }  }
+    }
+  }
 
   @override
   void onClose() {

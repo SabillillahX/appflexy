@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import '../controllers/sales_history_controller.dart';
 import '../../../routes/app_pages.dart';
 import 'package:apptiket/app/core/utils/auto_responsive.dart';
+import '../../../widgets/struk_pembayaran.dart';
+import 'package:apptiket/app/modules/kasir/controllers/kasir_controller.dart';
 
 class SalesHistoryView extends StatelessWidget {
   final NumberFormat currencyFormat = NumberFormat.currency(
@@ -386,8 +388,6 @@ class SalesHistoryView extends StatelessWidget {
     final double total = double.tryParse(sale['total']?.toString() ?? '0') ?? 0.0;
     final String customer = sale['customer'] ?? 'Customer ${index + 1}';
     final String time = sale['time'] ?? 'Waktu tidak tersedia';
-    final String paymentMethod = sale['payment_method'] ?? 'Tidak diketahui';
-    final List items = sale['items'] ?? [];
 
     return Container(
       margin: EdgeInsets.only(bottom: res.hp(2)),
@@ -453,6 +453,27 @@ class SalesHistoryView extends StatelessWidget {
                   fontSize: res.sp(15),
                   fontWeight: FontWeight.w700,
                 ),
+              ),
+            ],
+          ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                onPressed: () => _showDetailStruk(sale, res),
+                icon: Icon(
+                  Icons.receipt_long,
+                  color: primaryBlue,
+                  size: res.sp(20),
+                ),
+                padding: EdgeInsets.all(res.wp(1)),
+                constraints: BoxConstraints(),
+                tooltip: 'Detail Struk',
+              ),
+              SizedBox(width: res.wp(1)),
+              Icon(
+                Icons.expand_more,
+                color: textSecondary,
               ),
             ],
           ),
@@ -644,6 +665,59 @@ class SalesHistoryView extends StatelessWidget {
       return formatter.format(dateTime);
     } catch (e) {
       return dateTimeString;
+    }
+  }
+
+  // Fungsi untuk menampilkan detail struk
+  void _showDetailStruk(Map<String, dynamic> sale, AutoResponsive res) {
+    try {
+      // Debug: Print semua data sale untuk melihat struktur lengkap
+      print('DEBUG - Full sale data: $sale');
+      print('DEBUG - Available keys: ${sale.keys.toList()}');
+      
+      final double total = double.tryParse(sale['total']?.toString() ?? '0') ?? 0.0;
+      final String time = sale['time'] ?? DateTime.now().toString();
+      final List items = sale['items'] ?? [];
+      
+      // Ambil uang tunai dan kembalian dari data sale (jika tersedia)
+      final double uangTunai = double.tryParse(sale['uang_tunai']?.toString() ?? '0') ?? 0.0;
+      final double kembalian = double.tryParse(sale['kembalian']?.toString() ?? '0') ?? 0.0;
+      
+      // Debug: Print nilai uang tunai dan kembalian
+      print('DEBUG - Uang tunai from API: ${sale['uang_tunai']} -> $uangTunai');
+      print('DEBUG - Kembalian from API: ${sale['kembalian']} -> $kembalian');
+
+      // Convert items to OrderItem format
+      List<OrderItem> orderItems = items.map((item) {
+        final String name = item['name'] ?? 'Item';
+        final int quantity = int.tryParse(item['quantity']?.toString() ?? '0') ?? 0;
+        final double itemPrice = double.tryParse(item['total_item_price']?.toString() ?? '0') ?? 0.0;
+        final double unitPrice = quantity > 0 ? itemPrice / quantity : 0.0;
+        
+        return OrderItem(
+          name: name,
+          price: unitPrice,
+          quantity: quantity,
+        );
+      }).toList();
+
+      // Navigate to StrukPembayaranPage dengan data dari riwayat
+      Get.to(() => StrukPembayaranPage(
+        totalPembelian: total,
+        uangTunai: uangTunai, // Gunakan data dari riwayat
+        kembalian: kembalian, // Gunakan data dari riwayat
+        orderItems: orderItems,
+        orderDate: _formatDateTime(time),
+      ));
+
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Gagal memuat detail struk: $e',
+        backgroundColor: Colors.red.withOpacity(0.9),
+        colorText: Colors.white,
+        duration: Duration(seconds: 3),
+      );
     }
   }
 }

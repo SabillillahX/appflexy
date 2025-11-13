@@ -12,7 +12,7 @@ class DaftarKasirController extends GetxController {
   var pesananCount = 0.obs;
   var searchQuery = ''.obs;
   var isLoading = false.obs;
-  var selectedItems = <int>[].obs;
+  var selectedItems = <String>[].obs;
 
   final box = GetStorage(); // GetStorage instance
 
@@ -136,8 +136,11 @@ class DaftarKasirController extends GetxController {
     final itemId = item['id'];
     final isProduct = item.containsKey('namaProduk');
     final itemName = isProduct ? item['namaProduk'] : item['namaTiket'];
+    
+    // Buat unique identifier dengan menggabungkan tipe dan ID
+    final uniqueId = isProduct ? 'product_$itemId' : 'ticket_$itemId';
 
-    if (selectedItems.contains(itemId)) {
+    if (selectedItems.contains(uniqueId)) {
       Get.snackbar(
         'Item Sudah Ada',
         '$itemName sudah ada dalam keranjang',
@@ -150,20 +153,13 @@ class DaftarKasirController extends GetxController {
       final cartItem = {
         ...item,
         'quantity': 1,
-        'type': isProduct ? 'product' : 'ticket'
+        'type': isProduct ? 'product' : 'ticket',
+        'uniqueId': uniqueId, // Tambahkan uniqueId untuk referensi
       };
 
       pesananList.add(cartItem);
-      selectedItems.add(itemId);
+      selectedItems.add(uniqueId);
       updatePesananCount();
-
-      Get.snackbar(
-        'Berhasil',
-        '$itemName ditambahkan ke keranjang',
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 2),
-      );
     }
     update();
   }
@@ -177,7 +173,10 @@ class DaftarKasirController extends GetxController {
 
   void removeFromPesanan(Map<String, dynamic> item) {
     pesananList.remove(item);
-    selectedItems.remove(item['id']);
+    // Gunakan uniqueId jika ada, atau buat dari tipe dan ID
+    final uniqueId = item['uniqueId'] ?? 
+        (item.containsKey('namaProduk') ? 'product_${item['id']}' : 'ticket_${item['id']}');
+    selectedItems.remove(uniqueId);
     updatePesananCount();
     update(); // Memperbarui UI setelah perubahan data
   }
@@ -192,7 +191,10 @@ class DaftarKasirController extends GetxController {
   void syncSelectedItems() {
     selectedItems.clear();
     for (var item in pesananList) {
-      selectedItems.add(item['id']); // Menyinkronkan ID yang ada di pesanan
+      // Gunakan uniqueId jika ada, atau buat dari tipe dan ID
+      final uniqueId = item['uniqueId'] ?? 
+          (item.containsKey('namaProduk') ? 'product_${item['id']}' : 'ticket_${item['id']}');
+      selectedItems.add(uniqueId); // Menyinkronkan uniqueId yang ada di pesanan
     }
     update(); // Memperbarui UI
   }

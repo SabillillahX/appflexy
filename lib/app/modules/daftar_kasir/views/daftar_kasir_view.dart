@@ -243,7 +243,9 @@ class _DaftarKasirViewState extends State<DaftarKasirView> {
 
   Widget _buildListItem(Map<String, dynamic> item, String type, String title,
       double price, AutoResponsive res) {
-    bool isSelected = controller.selectedItems.contains(item['id']);
+    // Buat uniqueId yang sama seperti di controller
+    final uniqueId = type == 'produk' ? 'product_${item['id']}' : 'ticket_${item['id']}';
+    bool isSelected = controller.selectedItems.contains(uniqueId);
     
     return Container(
       decoration: BoxDecoration(
@@ -305,7 +307,7 @@ class _DaftarKasirViewState extends State<DaftarKasirView> {
                     ],
                   ),
                 ),
-                Obx(() => controller.selectedItems.contains(item['id'])
+                Obx(() => controller.selectedItems.contains(uniqueId)
                     ? Container(
                         padding: EdgeInsets.all(res.wp(2)),
                         decoration: BoxDecoration(
@@ -470,7 +472,7 @@ class _DaftarKasirViewState extends State<DaftarKasirView> {
           if (controller.pesananList.isEmpty) {
             Get.snackbar(
               'Pesanan Kosong',
-              'Tambahkan produk atau tiket ke pesanan terlebih dahulu',
+              'Pilih setidaknya satu item untuk lanjut transaksi',
               snackPosition: SnackPosition.BOTTOM,
               backgroundColor: Colors.white,
               borderRadius: 10,

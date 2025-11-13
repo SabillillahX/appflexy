@@ -446,42 +446,17 @@ class DaftarProdukView extends StatelessWidget {
               horizontal: res.wp(3),
               vertical: res.hp(0.8),
             ),
-            decoration: BoxDecoration(
-              color: stok > 0 ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                color: stok > 0 ? Colors.green.withOpacity(0.3) : Colors.red.withOpacity(0.3),
-                width: 1,
-              ),
-            ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  stok > 0 ? Icons.inventory_2_outlined : Icons.warning_outlined,
-                  color: stok > 0 ? Colors.green : Colors.red,
-                  size: res.sp(16),
-                ),
-                SizedBox(width: res.wp(2)),
                 Text(
                   'Stok: $stok',
                   style: TextStyle(
-                    color: stok > 0 ? Colors.green : Colors.red,
+                    
                     fontSize: res.sp(13),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                if (stok <= 5 && stok > 0) ...[
-                  SizedBox(width: res.wp(2)),
-                  Text(
-                    '(Stok menipis)',
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: res.sp(11),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
               ],
             ),
           ),
@@ -751,7 +726,7 @@ class DaftarProdukView extends StatelessWidget {
   }
 
   void _editProduk(int index, Map<String, dynamic> produk) {
-    Get.to(() => EditProdukView(produk: produk, index: index))?.then((_) {
+    Get.to(() => TambahProdukView(produk: produk, index: index))?.then((_) {
       controller.fetchProducts();
     });
   }

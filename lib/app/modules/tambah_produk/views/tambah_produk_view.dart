@@ -124,7 +124,8 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                 Row(
                   children: [
                     IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.white, size: res.sp(22)),
+                      icon: Icon(Icons.arrow_back,
+                          color: Colors.white, size: res.sp(22)),
                       padding: EdgeInsets.zero,
                       constraints: BoxConstraints(),
                       onPressed: () async {
@@ -138,23 +139,14 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.produk == null ? 'Tambah Produk' : 'Edit Produk',
+                            widget.produk == null
+                                ? 'Tambah Produk'
+                                : 'Edit Produk',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: res.sp(18),
                               fontWeight: FontWeight.w700,
                               letterSpacing: -0.5,
-                            ),
-                          ),
-                          SizedBox(height: res.hp(0.2)),
-                          Text(
-                            widget.produk == null 
-                                ? 'Tambahkan produk baru untuk inventaris Anda'
-                                : 'Edit informasi produk',
-                            style: TextStyle(
-                              color: Colors.white70,
-                              fontSize: res.sp(12),
-                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ],
@@ -169,94 +161,93 @@ class _TambahProdukViewState extends State<TambahProdukView> {
       ),
     );
   }
-  
-  Widget _buildModernFormCard(AutoResponsive res, TambahProdukController controller) {
-    return GetBuilder<TambahProdukController>(
-      builder: (controller) {
-        return Container(
-          padding: EdgeInsets.all(res.wp(5)),
-          decoration: BoxDecoration(
-            color: cardColor,
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.04),
-                blurRadius: 15,
-                offset: Offset(0, 4),
-              ),
-            ],
-            border: Border.all(
-              color: borderColor,
-              width: 0.5,
+
+  Widget _buildModernFormCard(
+      AutoResponsive res, TambahProdukController controller) {
+    return GetBuilder<TambahProdukController>(builder: (controller) {
+      return Container(
+        padding: EdgeInsets.all(res.wp(5)),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 15,
+              offset: Offset(0, 4),
             ),
+          ],
+          border: Border.all(
+            color: borderColor,
+            width: 0.5,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Informasi Produk',
-                style: TextStyle(
-                  color: textPrimary,
-                  fontSize: res.sp(18),
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.3,
-                ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Informasi Produk',
+              style: TextStyle(
+                color: textPrimary,
+                fontSize: res.sp(18),
+                fontWeight: FontWeight.w700,
+                letterSpacing: -0.3,
               ),
-              SizedBox(height: res.hp(2.5)),
+            ),
+            SizedBox(height: res.hp(2.5)),
 
-              // Nama Produk
-              _buildModernTextField(
-                controller: controller.namaProdukController,
-                label: 'Nama Produk',
-                hint: 'Masukkan nama produk',
-                res: res,
-              ),
-              SizedBox(height: res.hp(2.5)),
+            // Nama Produk
+            _buildModernTextField(
+              controller: controller.namaProdukController,
+              label: 'Nama Produk',
+              hint: 'Masukkan nama produk',
+              res: res,
+            ),
+            SizedBox(height: res.hp(2.5)),
 
-              // Kode Produk
-              _buildModernTextField(
-                controller: controller.kodeProdukController,
-                label: 'Kode Produk',
-                hint: 'Masukkan kode produk',
-                res: res,
-              ),
-              SizedBox(height: res.hp(2.5)),
+            // Kode Produk
+            _buildModernTextField(
+              controller: controller.kodeProdukController,
+              label: 'Kode Produk',
+              hint: 'Masukkan kode produk',
+              res: res,
+            ),
+            SizedBox(height: res.hp(2.5)),
 
-              // Kategori Produk
-              _buildModernKategoriField(res, controller),
-              SizedBox(height: res.hp(2.5)),
+            // Kategori Produk
+            _buildModernKategoriField(res, controller),
+            SizedBox(height: res.hp(2.5)),
 
-              // Stok Field
-              _buildModernStokField(res, controller),
-              SizedBox(height: res.hp(2.5)),
+            // Stok Field
+            _buildModernStokField(res, controller),
+            SizedBox(height: res.hp(2.5)),
 
-              // Foto Produk
-              _buildModernFotoField(res, controller),
-              SizedBox(height: res.hp(2.5)),
+            // Foto Produk
+            _buildModernFotoField(res, controller),
+            SizedBox(height: res.hp(2.5)),
 
-              // Harga Sewa
-              _buildModernTextField(
-                controller: controller.hargaJualController,
-                label: 'Harga Sewa',
-                hint: 'Masukkan harga sewa',
-                keyboardType: TextInputType.number,
-                res: res,
-              ),
-              SizedBox(height: res.hp(2.5)),
+            // Harga Sewa
+            _buildModernTextField(
+              controller: controller.hargaJualController,
+              label: 'Harga Sewa',
+              hint: 'Masukkan harga sewa',
+              keyboardType: TextInputType.number,
+              res: res,
+            ),
+            SizedBox(height: res.hp(2.5)),
 
-              // Keterangan
-              _buildModernTextField(
-                controller: controller.keteranganController,
-                label: 'Keterangan Produk',
-                hint: 'Masukkan keterangan produk (opsional)',
-                maxLines: 4,
-                res: res,
-              ),
-            ],
-          ),
-        );
-      }
-    );
+            // Keterangan
+            _buildModernTextField(
+              controller: controller.keteranganController,
+              label: 'Keterangan Produk',
+              hint: 'Masukkan keterangan produk (opsional)',
+              maxLines: 4,
+              res: res,
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildModernTextField({
@@ -313,7 +304,8 @@ class _TambahProdukViewState extends State<TambahProdukView> {
     );
   }
 
-  Widget _buildModernKategoriField(AutoResponsive res, TambahProdukController controller) {
+  Widget _buildModernKategoriField(
+      AutoResponsive res, TambahProdukController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -326,9 +318,9 @@ class _TambahProdukViewState extends State<TambahProdukView> {
           ),
         ),
         SizedBox(height: res.hp(0.8)),
-        
         Container(
-          padding: EdgeInsets.symmetric(horizontal: res.wp(4), vertical: res.hp(1.5)),
+          padding: EdgeInsets.symmetric(
+              horizontal: res.wp(4), vertical: res.hp(1.5)),
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.circular(12),
@@ -336,30 +328,22 @@ class _TambahProdukViewState extends State<TambahProdukView> {
           ),
           child: Row(
             children: [
-              Icon(
-                Bootstrap.list,
-                color: primaryBlue,
-                size: res.sp(20),
-              ),
-              SizedBox(width: res.wp(3)),
-              
               Expanded(
                 child: Text(
                   controller.kategoriController.text.isEmpty
-                    ? 'Pilih kategori produk'
-                    : controller.kategoriController.text,
+                      ? 'Pilih kategori produk'
+                      : controller.kategoriController.text,
                   style: TextStyle(
                     fontSize: res.sp(12),
                     color: controller.kategoriController.text.isEmpty
-                      ? textSecondary
-                      : textPrimary,
+                        ? textSecondary
+                        : textPrimary,
                     fontWeight: controller.kategoriController.text.isEmpty
-                      ? FontWeight.w400
-                      : FontWeight.w500,
+                        ? FontWeight.w400
+                        : FontWeight.w500,
                   ),
                 ),
               ),
-              
               PopupMenuButton<String>(
                 icon: Icon(
                   Icons.arrow_drop_down,
@@ -391,8 +375,9 @@ class _TambahProdukViewState extends State<TambahProdukView> {
       ],
     );
   }
-  
-  Widget _buildModernStokField(AutoResponsive res, TambahProdukController controller) {
+
+  Widget _buildModernStokField(
+      AutoResponsive res, TambahProdukController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -405,7 +390,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
           ),
         ),
         SizedBox(height: res.hp(0.8)),
-        
+
         Container(
           padding: EdgeInsets.all(res.wp(4)),
           decoration: BoxDecoration(
@@ -415,13 +400,6 @@ class _TambahProdukViewState extends State<TambahProdukView> {
           ),
           child: Row(
             children: [
-              Icon(
-                Bootstrap.box2,
-                color: primaryBlue,
-                size: res.sp(20),
-              ),
-              SizedBox(width: res.wp(3)),
-              
               Expanded(
                 child: GestureDetector(
                   onTap: () {
@@ -447,8 +425,8 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                       Spacer(),
                       Text(
                         controller.stokController.text.isEmpty
-                          ? '0'
-                          : controller.stokController.text,
+                            ? '0'
+                            : controller.stokController.text,
                         style: TextStyle(
                           fontSize: res.sp(16),
                           fontWeight: FontWeight.w700,
@@ -459,18 +437,20 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                   ),
                 ),
               ),
-              
+
               SizedBox(width: res.wp(2)),
-              
+
               // Plus/Minus buttons
               Row(
                 children: [
                   _buildStokButton(
                     icon: Icons.remove,
                     onPressed: () {
-                      int currentStock = int.tryParse(controller.stokController.text) ?? 0;
+                      int currentStock =
+                          int.tryParse(controller.stokController.text) ?? 0;
                       if (currentStock > 0) {
-                        controller.stokController.text = (currentStock - 1).toString();
+                        controller.stokController.text =
+                            (currentStock - 1).toString();
                         controller.update();
                       }
                     },
@@ -480,8 +460,10 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                   _buildStokButton(
                     icon: Icons.add,
                     onPressed: () {
-                      int currentStock = int.tryParse(controller.stokController.text) ?? 0;
-                      controller.stokController.text = (currentStock + 1).toString();
+                      int currentStock =
+                          int.tryParse(controller.stokController.text) ?? 0;
+                      controller.stokController.text =
+                          (currentStock + 1).toString();
                       controller.update();
                     },
                     res: res,
@@ -527,8 +509,10 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                   children: stockOptions.map((int stock) {
                     return ElevatedButton(
                       onPressed: () {
-                        int currentStock = int.tryParse(controller.stokController.text) ?? 0;
-                        controller.stokController.text = (currentStock + stock).toString();
+                        int currentStock =
+                            int.tryParse(controller.stokController.text) ?? 0;
+                        controller.stokController.text =
+                            (currentStock + stock).toString();
                         controller.update();
                         setState(() {
                           showNominalOptions = false;
@@ -591,7 +575,8 @@ class _TambahProdukViewState extends State<TambahProdukView> {
     );
   }
 
-  Widget _buildModernFotoField(AutoResponsive res, TambahProdukController controller) {
+  Widget _buildModernFotoField(
+      AutoResponsive res, TambahProdukController controller) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -604,12 +589,12 @@ class _TambahProdukViewState extends State<TambahProdukView> {
           ),
         ),
         SizedBox(height: res.hp(0.8)),
-        
         GestureDetector(
           onTap: controller.pickImage,
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: res.hp(2), horizontal: res.wp(4)),
+            padding: EdgeInsets.symmetric(
+                vertical: res.hp(2), horizontal: res.wp(4)),
             decoration: BoxDecoration(
               color: backgroundColor,
               borderRadius: BorderRadius.circular(12),
@@ -617,33 +602,85 @@ class _TambahProdukViewState extends State<TambahProdukView> {
             ),
             child: Row(
               children: [
+                // Prioritas: selectedImage -> existingImage -> placeholder
                 controller.selectedImage != null
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        controller.selectedImage!,
-                        width: res.wp(15),
-                        height: res.wp(15),
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                  : Container(
-                      width: res.wp(15),
-                      height: res.wp(15),
-                      decoration: BoxDecoration(
-                        color: primaryBlue.withOpacity(0.1),
+                    ? ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: primaryBlue.withOpacity(0.3),
-                          width: 1,
+                        child: Image.file(
+                          controller.selectedImage!,
+                          width: res.wp(15),
+                          height: res.wp(15),
+                          fit: BoxFit.cover,
                         ),
-                      ),
-                      child: Icon(
-                        Bootstrap.image,
-                        size: res.wp(6),
-                        color: primaryBlue,
-                      ),
-                    ),
+                      )
+                    : controller.getImageUrl() != null
+                        ? Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  controller.getImageUrl()!,
+                                  width: res.wp(15),
+                                  height: res.wp(15),
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return Container(
+                                      width: res.wp(15),
+                                      height: res.wp(15),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Icon(
+                                        Icons.broken_image,
+                                        color: Colors.grey[400],
+                                        size: res.wp(6),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Positioned(
+                                right: -2,
+                                bottom: -2,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withOpacity(0.2),
+                                        blurRadius: 4,
+                                      ),
+                                    ],
+                                  ),
+                                  padding: EdgeInsets.all(4),
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: primaryBlue,
+                                    size: res.wp(4),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container(
+                            width: res.wp(15),
+                            height: res.wp(15),
+                            decoration: BoxDecoration(
+                              color: primaryBlue.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: primaryBlue.withOpacity(0.3),
+                                width: 1,
+                              ),
+                            ),
+                            child: Icon(
+                              Bootstrap.image,
+                              size: res.wp(6),
+                              color: primaryBlue,
+                            ),
+                          ),
                 SizedBox(width: res.wp(3)),
                 Expanded(
                   child: Column(
@@ -651,8 +688,10 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                     children: [
                       Text(
                         controller.selectedImage != null
-                          ? 'Ganti Foto Produk'
-                          : 'Masukkan Foto Produk',
+                            ? 'Ganti Foto Produk'
+                            : controller.getImageUrl() != null
+                                ? 'Ganti Foto Produk'
+                                : 'Masukkan Foto Produk',
                         style: TextStyle(
                           fontSize: res.sp(12),
                           fontWeight: FontWeight.w500,
@@ -670,11 +709,6 @@ class _TambahProdukViewState extends State<TambahProdukView> {
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.cloud_upload_outlined,
-                  color: primaryBlue,
-                  size: res.sp(22),
-                ),
               ],
             ),
           ),
@@ -683,7 +717,8 @@ class _TambahProdukViewState extends State<TambahProdukView> {
     );
   }
 
-  Widget _buildModernSubmitButton(AutoResponsive res, TambahProdukController controller) {
+  Widget _buildModernSubmitButton(
+      AutoResponsive res, TambahProdukController controller) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(res.wp(5)),
@@ -711,20 +746,54 @@ class _TambahProdukViewState extends State<TambahProdukView> {
         ),
         child: ElevatedButton(
           onPressed: () async {
+            // Validasi input
             if (controller.namaProdukController.text.isEmpty ||
                 controller.kodeProdukController.text.isEmpty ||
                 controller.kategoriController.text.isEmpty ||
                 controller.stokController.text.isEmpty ||
                 controller.hargaJualController.text.isEmpty) {
-              Get.snackbar('Error', 'Semua kolom harus diisi',
-                  colorText: Colors.black.withOpacity(0.8),
-                  barBlur: 15,
-                  icon: const Icon(Icons.error, color: Colors.red),
-                  duration: const Duration(seconds: 3),
-                  snackPosition: SnackPosition.TOP);
-              return;
+              Get.snackbar(
+                'Error',
+                'Semua kolom harus diisi',
+                colorText: Colors.white,
+                backgroundColor: Colors.red,
+                icon: const Icon(Icons.error, color: Colors.white),
+                duration: const Duration(seconds: 3),
+                snackPosition: SnackPosition.TOP,
+              );
+              return; // Hentikan eksekusi jika validasi gagal
             }
-            await controller.addProduct();
+
+            // Jika produk baru, tambahkan produk
+            if (widget.produk == null) {
+              final success = await controller.addProduct();
+              if (success) {
+                Get.snackbar(
+                  'Berhasil',
+                  'Produk berhasil ditambahkan',
+                  colorText: Colors.white,
+                  backgroundColor: Colors.green,
+                  duration: const Duration(seconds: 3),
+                  snackPosition: SnackPosition.TOP,
+                );
+                Get.offAllNamed(
+                    Routes.DAFTAR_PRODUK); // Navigasi ke daftar produk
+              }
+            } else {
+              // Jika produk sedang diedit, perbarui produk
+              await controller.updateProduct(widget.produk!['id']);
+
+              Get.snackbar(
+                'Berhasil',
+                'Produk berhasil diperbarui',
+                colorText: Colors.white,
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 3),
+                snackPosition: SnackPosition.TOP,
+              );
+              Get.offAllNamed(
+                  Routes.DAFTAR_PRODUK); // Navigasi ke daftar produk
+            }
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: primaryBlue,
@@ -743,7 +812,7 @@ class _TambahProdukViewState extends State<TambahProdukView> {
               ),
               SizedBox(width: res.wp(2)),
               Text(
-                'Tambahkan Produk',
+                widget.produk == null ? 'Tambahkan Produk' : 'Simpan Perubahan',
                 style: TextStyle(
                   fontSize: res.sp(14),
                   fontWeight: FontWeight.w600,
