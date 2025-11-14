@@ -155,7 +155,7 @@ class RegistrasiController extends GetxController {
         // Clear all fields after successful registration
         clearAllFields();
 
-        Get.offNamed(Routes.PROFILE);
+        Get.offAllNamed(Routes.PROFILE);
 
         // Refresh data in DaftarKasirController
         final daftarKasirController = Get.find<DaftarKasirController>();

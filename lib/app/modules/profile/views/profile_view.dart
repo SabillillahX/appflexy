@@ -21,7 +21,9 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     final res = AutoResponsive(context);
 
-    return Scaffold(      appBar: AppBar(
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xff181681),
         elevation: 1,
         title: Text(
@@ -47,7 +49,8 @@ class ProfileView extends GetView<ProfileController> {
         onTap: () {
           // Menutup keyboard saat mengetuk area kosong
           FocusScope.of(context).unfocus();
-        },        child: SingleChildScrollView(
+        },
+        child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: res.wp(5),
@@ -87,7 +90,8 @@ class ProfileView extends GetView<ProfileController> {
                                 color: Colors.grey.shade600,
                               )
                             : ClipRRect(
-                                borderRadius: BorderRadius.circular(res.wp(17.5)),
+                                borderRadius:
+                                    BorderRadius.circular(res.wp(17.5)),
                                 child: Image.file(
                                   File(controller.imagePath.value),
                                   fit: BoxFit.cover,
@@ -97,7 +101,8 @@ class ProfileView extends GetView<ProfileController> {
                               ),
                       );
                     }),
-                  ),                ),
+                  ),
+                ),
                 Gap(res.hp(4)),
 
                 // Informasi Toko
@@ -143,7 +148,8 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                     ),
                     style: TextStyle(fontSize: res.sp(16)),
-                  ),                ),
+                  ),
+                ),
                 Gap(res.hp(2.5)),
 
                 // Bidang Usaha
@@ -189,7 +195,8 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                     ),
                     style: TextStyle(fontSize: res.sp(16)),
-                  ),                ),
+                  ),
+                ),
                 Gap(res.hp(2.5)),
 
                 // Alamat Toko
@@ -240,7 +247,8 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                     ),
                     style: TextStyle(fontSize: res.sp(16)),
-                  ),                ),
+                  ),
+                ),
                 Gap(res.hp(4)),
 
                 // Tombol Simpan
@@ -299,7 +307,7 @@ class ProfileView extends GetView<ProfileController> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: res.hp(3)),
               ],
             ),

@@ -14,14 +14,14 @@
 /// ```
 class ApiConstants {
   // Base URLs
-  // static const String baseUrl = 'https://sabil.sofine.my.id/api';
-  static const String baseUrl = 'http://192.168.100.235:8000/api';
+  static const String baseUrl = 'https://sabil.sofine.my.id/api';
+  // static const String baseUrl = 'http://192.168.100.235:8000/api';
 
-  static const String storageUrl = 'http://192.168.100.235:8000/storage';
-  // static const String storageUrl = 'https://sabil.sofine.my.id/storage';
+  // static const String storageUrl = 'http://192.168.100.235:8000/storage';
+  static const String storageUrl = 'https://sabil.sofine.my.id/storage';
 
-  static const String mainUrl = 'http://192.168.100.235:8000';
-  // static const String mainUrl = 'https://sabil.sofine.my.id/';
+  //static const String mainUrl = 'http://192.168.100.235:8000';
+  static const String mainUrl = 'https://sabil.sofine.my.id/';
   // API endpoints
   static const String products = '/products';
   static const String tikets = '/tikets';

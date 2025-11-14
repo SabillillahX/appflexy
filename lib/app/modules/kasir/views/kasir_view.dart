@@ -564,16 +564,16 @@ class _KasirViewState extends State<KasirView> {
                     Navigator.pop(context);
                   },
                 ),
-                // ListTile(
-                //   leading: Icon(Icons.qr_code_scanner,
-                //       color: const Color(0xff181681), size: res.sp(20)),
-                //   title: Text('QRIS', style: TextStyle(fontSize: res.sp(15))),
-                //   onTap: () {
-                //     setState(() => selectedPaymentMethod = 'QRIS');
-                //     controller.setPaymentMethod('QRIS');
-                //     Navigator.pop(context);
-                //   },
-                // ),
+                ListTile(
+                  leading: Icon(Icons.qr_code_scanner,
+                      color: const Color(0xff181681), size: res.sp(20)),
+                  title: Text('QR Code', style: TextStyle(fontSize: res.sp(15))),
+                  onTap: () {
+                    setState(() => selectedPaymentMethod = 'QRIS');
+                    controller.setPaymentMethod('QRIS');
+                    Navigator.pop(context);
+                  },
+                ),
                 // ListTile(
                 //   leading: Icon(Icons.payment,
                 //       color: const Color(0xff181681), size: res.sp(20)),
